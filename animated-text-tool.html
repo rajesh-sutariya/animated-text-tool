@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Enhanced Animated Text Tool</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lexend+Deca&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Orbitron&family=Roboto+Mono&family=Bungee&family=Monoton&family=Press+Start+2P&family=Pacifico&family=Lobster&family=Caveat&family=Shadows+Into+Light&family=Amatic+SC&family=Playfair+Display&family=Righteous&family=Fredoka+One&family=Concert+One&family=Permanent+Marker&family=Courgette&family=Poiret+One&family=Baloo+2&family=Titan+One&family=Alfa+Slab+One&family=Black+Ops+One&family=Luckiest+Guy&family=Special+Elite&family=Acme&family=Kalam&family=Rakkas&family=Quicksand&family=Yeseva+One&family=Chango&family=Indie+Flower&family=Chewy&family=Gloria+Hallelujah&family=Patua+One&family=Russo+One&family=Satisfy&family=Vast+Shadow&family=Boogaloo&family=Bangers&family=Sigmar+One&family=Architects+Daughter&family=Gruppo&family=Great+Vibes&family=Frijole&family=Covered+By+Your+Grace&family=Sniglet&family=VT323&family=Chilanka&family=Syncopate&family=Zilla+Slab&family=Ropa+Sans&family=Gugi&family=Neucha&family=Cabin+Sketch&family=Staatliches&family=Rajdhani&family=Mitr&family=Ruslan+Display&family=Ubuntu+Mono&family=Space+Mono&family=Kanit&family=Cookie&family=Yellowtail&family=Schoolbell&family=Tilt+Prism&family=Gochi+Hand&family=Courgette&family=Sigmar+One&family=Unica+One&family=Overlock&family=Bebas+Neue&family=Inder&family=Squada+One&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+  <style>
+    body {
+      font-family: 'Lexend Deca', sans-serif;
+      background: #f0f0f0;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    h2 {
+      margin-bottom: 20px;
+      text-shadow: 1px 1px 2px #ccc;
+    }
+    .controls {
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.15);
+      max-width: 800px;
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+    .full-width {
+      grid-column: span 2;
+    }
+    label {
+      font-weight: bold;
+      display: block;
+      margin-bottom: 5px;
+    }
+    input[type="text"], input[type="file"], select, input[type="range"] {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-shadow: inset 0 1px 3px #ddd;
+      font-family: 'Lexend Deca', sans-serif;
+    }
+
+    input[type="color"] {
+      width: 60px;
+      height: 40px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      padding: 0;
+      box-shadow: inset 0 1px 3px #ddd;
+    }
+
+    input[type="text"], input[type="color"], input[type="file"], select, input[type="range"] {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-shadow: inset 0 1px 3px #ddd;
+      font-family: 'Lexend Deca', sans-serif;
+    }
+    canvas {
+      margin-top: 20px;
+      border: 2px solid #333;
+      max-width: 100%;
+      height: auto;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      border: none;
+      border-radius: 5px;
+      background-color: #007bff;
+      color: white;
+      transition: 0.3s;
+      font-family: 'Lexend Deca', sans-serif;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <h2>Enhanced Animated Text Tool</h2>
+  <div class="controls">
+    <div class="full-width">
+      <label>Your Text:</label>
+      <input type="text" id="textInput" placeholder="Your text..." value="Hello World!">
+    </div>
+
+    <div>
+      <label>Font Size: <span id="fontSizeLabel">40px</span></label>
+      <input type="range" id="fontSize" min="10" max="100" value="40">
+    </div>
+
+    <div>
+      <label>Text Color:</label>
+      <input type="color" id="colorPicker" value="#000000">
+    </div>
+
+    <div class="full-width">
+      <label>Choose Font:</label>
+      <select id="fontDropdown"></select>
+    </div>
+
+    <div class="full-width">
+      <label>Background Texture:</label>
+      <select id="textureDropdown"></select>
+    </div>
+
+    <div>
+      <label>Upload Background:</label>
+      <input type="file" id="bgUpload" accept="image/*">
+    </div>
+
+    <div>
+      <label><input type="checkbox" id="bgToggle"> Enable Background Color:</label>
+      <input type="color" id="bgColor" value="#ffffff" disabled>
+    </div>
+
+    <div>
+      <label>Text Shadow:</label>
+      <select id="shadow">
+        <option value="both">Both</option>
+        <option value="right">Right</option>
+        <option value="bottom">Bottom</option>
+        <option value="none">None</option>
+      </select>
+    </div>
+
+    <div>
+      <label>Animation Type:</label>
+      <select id="animationType">
+        <option value="fade">Fade</option>
+        <option value="slide">Slide</option>
+        <option value="scale">Scale</option>
+      </select>
+    </div>
+
+    <div>
+      <button onclick="generateText()">Generate</button>
+    </div>
+    <div>
+      <button onclick="downloadPNG()">Download PNG</button>
+    </div>
+  </div>
+
+  <canvas id="textCanvas" width="800" height="300"></canvas>
+
+  <script>
+    const canvas = document.getElementById("textCanvas");
+    const ctx = canvas.getContext("2d");
+    let selectedFont = "Anton";
+    let selectedTexture = null;
+
+    const fonts = [
+      "Anton", "Orbitron", "Roboto Mono", "Bungee", "Monoton", "Press Start 2P", "Pacifico", "Lobster", "Caveat", "Shadows Into Light", "Amatic SC", "Playfair Display", "Righteous", "Fredoka One", "Concert One", "Permanent Marker", "Courgette", "Poiret One", "Baloo 2", "Titan One", "Alfa Slab One", "Black Ops One", "Luckiest Guy", "Special Elite", "Acme", "Kalam", "Rakkas", "Quicksand", "Yeseva One", "Chango", "Indie Flower", "Chewy", "Gloria Hallelujah", "Patua One", "Russo One", "Satisfy", "Vast Shadow", "Boogaloo", "Bangers", "Sigmar One", "Architects Daughter", "Gruppo", "Great Vibes", "Frijole", "Covered By Your Grace", "Sniglet", "VT323", "Chilanka", "Syncopate", "Zilla Slab", "Ropa Sans", "Gugi", "Neucha", "Cabin Sketch", "Staatliches", "Rajdhani", "Mitr", "Ruslan Display", "Ubuntu Mono", "Space Mono", "Kanit", "Cookie", "Yellowtail", "Schoolbell", "Tilt Prism", "Gochi Hand", "Unica One", "Overlock", "Bebas Neue", "Inder", "Squada One"
+    ];
+
+    const textures = Array.from({length: 100}, (_, i) => `https://www.transparenttextures.com/patterns/pattern-${(i % 50) + 1}.png`);
+
+    const fontDropdown = document.getElementById("fontDropdown");
+    fonts.forEach(font => {
+      const option = document.createElement("option");
+      option.textContent = font;
+      option.value = font;
+      option.style.fontFamily = font;
+      fontDropdown.appendChild(option);
+    });
+    fontDropdown.value = selectedFont;
+    fontDropdown.onchange = () => selectedFont = fontDropdown.value;
+
+    const textureDropdown = document.getElementById("textureDropdown");
+    textures.forEach((url, i) => {
+      const option = document.createElement("option");
+      option.textContent = `Texture ${i + 1}`;
+      option.value = url;
+      textureDropdown.appendChild(option);
+    });
+    textureDropdown.onchange = () => selectedTexture = textureDropdown.value;
+
+    document.getElementById("fontSize").oninput = e => {
+      document.getElementById("fontSizeLabel").innerText = e.target.value + "px";
+    }
+
+    document.getElementById("bgToggle").onchange = e => {
+      document.getElementById("bgColor").disabled = !e.target.checked;
+    }
+
+    function generateText() {
+      const text = document.getElementById("textInput").value;
+      const fontSize = document.getElementById("fontSize").value;
+      const color = document.getElementById("colorPicker").value;
+      const shadow = document.getElementById("shadow").value;
+      const animation = document.getElementById("animationType").value;
+      const bgEnabled = document.getElementById("bgToggle").checked;
+      const bgColor = document.getElementById("bgColor").value;
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      const draw = () => {
+        if (bgEnabled) {
+          ctx.fillStyle = bgColor;
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
+        ctx.font = `${fontSize}px '${selectedFont}'`;
+        ctx.fillStyle = color;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.shadowColor = "rgba(0,0,0,0.3)";
+        ctx.shadowBlur = 4;
+        ctx.shadowOffsetX = (shadow === 'right' || shadow === 'both') ? 4 : 0;
+        ctx.shadowOffsetY = (shadow === 'bottom' || shadow === 'both') ? 4 : 0;
+        ctx.fillText(text, canvas.width / 2, canvas.height / 2);
+
+        if (animation === "fade") {
+          anime({ targets: canvas, opacity: [0, 1], duration: 1000 });
+        } else if (animation === "slide") {
+          canvas.style.transform = 'translateX(-100%)';
+          anime({ targets: canvas, translateX: ['-100%', '0%'], duration: 1000 });
+        } else if (animation === "scale") {
+          canvas.style.transform = 'scale(0.2)';
+          anime({ targets: canvas, scale: [0.2, 1], duration: 1000 });
+        }
+      };
+
+      const file = document.getElementById("bgUpload").files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = e => {
+          const img = new Image();
+          img.onload = () => {
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            draw();
+          }
+          img.src = e.target.result;
+        }
+        reader.readAsDataURL(file);
+      } else if (selectedTexture) {
+        const img = new Image();
+        img.crossOrigin = "anonymous";
+        img.onload = () => {
+          const pattern = ctx.createPattern(img, 'repeat');
+          ctx.fillStyle = pattern;
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+          draw();
+        }
+        img.src = selectedTexture;
+      } else {
+        draw();
+      }
+    }
+
+    function downloadPNG() {
+      generateText();
+      setTimeout(() => {
+        const link = document.createElement('a');
+        link.download = 'animated-text.png';
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+      }, 800);
+    }
+  </script>
+</body>
+</html>
