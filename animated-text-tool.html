@@ -47,7 +47,6 @@
       box-shadow: inset 0 1px 3px #ddd;
       font-family: 'Lexend Deca', sans-serif;
     }
-
     input[type="color"] {
       width: 60px;
       height: 40px;
@@ -55,15 +54,6 @@
       border-radius: 5px;
       padding: 0;
       box-shadow: inset 0 1px 3px #ddd;
-    }
-
-    input[type="text"], input[type="color"], input[type="file"], select, input[type="range"] {
-      width: 100%;
-      padding: 8px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      box-shadow: inset 0 1px 3px #ddd;
-      font-family: 'Lexend Deca', sans-serif;
     }
     canvas {
       margin-top: 20px;
@@ -160,11 +150,38 @@
     let selectedFont = "Anton";
     let selectedTexture = null;
 
-    const fonts = [
-      "Anton", "Orbitron", "Roboto Mono", "Bungee", "Monoton", "Press Start 2P", "Pacifico", "Lobster", "Caveat", "Shadows Into Light", "Amatic SC", "Playfair Display", "Righteous", "Fredoka One", "Concert One", "Permanent Marker", "Courgette", "Poiret One", "Baloo 2", "Titan One", "Alfa Slab One", "Black Ops One", "Luckiest Guy", "Special Elite", "Acme", "Kalam", "Rakkas", "Quicksand", "Yeseva One", "Chango", "Indie Flower", "Chewy", "Gloria Hallelujah", "Patua One", "Russo One", "Satisfy", "Vast Shadow", "Boogaloo", "Bangers", "Sigmar One", "Architects Daughter", "Gruppo", "Great Vibes", "Frijole", "Covered By Your Grace", "Sniglet", "VT323", "Chilanka", "Syncopate", "Zilla Slab", "Ropa Sans", "Gugi", "Neucha", "Cabin Sketch", "Staatliches", "Rajdhani", "Mitr", "Ruslan Display", "Ubuntu Mono", "Space Mono", "Kanit", "Cookie", "Yellowtail", "Schoolbell", "Tilt Prism", "Gochi Hand", "Unica One", "Overlock", "Bebas Neue", "Inder", "Squada One"
-    ];
+    const fonts = ["Anton", "Orbitron", "Roboto Mono", "Bungee", "Monoton", "Press Start 2P", "Pacifico", "Lobster", "Caveat", "Shadows Into Light", "Amatic SC", "Playfair Display", "Righteous", "Fredoka One", "Concert One", "Permanent Marker", "Courgette", "Poiret One", "Baloo 2", "Titan One", "Alfa Slab One", "Black Ops One", "Luckiest Guy", "Special Elite", "Acme", "Kalam", "Rakkas", "Quicksand", "Yeseva One", "Chango", "Indie Flower", "Chewy", "Gloria Hallelujah", "Patua One", "Russo One", "Satisfy", "Vast Shadow", "Boogaloo", "Bangers", "Sigmar One", "Architects Daughter", "Gruppo", "Great Vibes", "Frijole", "Covered By Your Grace", "Sniglet", "VT323", "Chilanka", "Syncopate", "Zilla Slab", "Ropa Sans", "Gugi", "Neucha", "Cabin Sketch", "Staatliches", "Rajdhani", "Mitr", "Ruslan Display", "Ubuntu Mono", "Space Mono", "Kanit", "Cookie", "Yellowtail", "Schoolbell", "Tilt Prism", "Gochi Hand", "Unica One", "Overlock", "Bebas Neue", "Inder", "Squada One"];
 
-    const textures = Array.from({length: 100}, (_, i) => `https://www.transparenttextures.com/patterns/pattern-${(i % 50) + 1}.png`);
+    const textures = [
+      "https://www.transparenttextures.com/patterns/asfalt-dark.png",
+      "https://www.transparenttextures.com/patterns/brick-wall.png",
+      "https://www.transparenttextures.com/patterns/black-thread.png",
+      "https://www.transparenttextures.com/patterns/concrete-wall.png",
+      "https://www.transparenttextures.com/patterns/dark-mosaic.png",
+      "https://www.transparenttextures.com/patterns/fabric-of-squares.png",
+      "https://www.transparenttextures.com/patterns/french-stucco.png",
+      "https://www.transparenttextures.com/patterns/geometry2.png",
+      "https://www.transparenttextures.com/patterns/grey-wash-wall.png",
+      "https://www.transparenttextures.com/patterns/gplay.png",
+      "https://www.transparenttextures.com/patterns/hexellence.png",
+      "https://www.transparenttextures.com/patterns/knitted-netting.png",
+      "https://www.transparenttextures.com/patterns/light-wool.png",
+      "https://www.transparenttextures.com/patterns/low-contrast-linen.png",
+      "https://www.transparenttextures.com/patterns/noise-pattern-with-subtle-cross-lines.png",
+      "https://www.transparenttextures.com/patterns/paper-fibers.png",
+      "https://www.transparenttextures.com/patterns/purty-wood.png",
+      "https://www.transparenttextures.com/patterns/rough-cloth-light.png",
+      "https://www.transparenttextures.com/patterns/shley-tree-2.png",
+      "https://www.transparenttextures.com/patterns/skulls.png",
+      "https://www.transparenttextures.com/patterns/stardust.png",
+      "https://www.transparenttextures.com/patterns/subtle-dots.png",
+      "https://www.transparenttextures.com/patterns/symphony.png",
+      "https://www.transparenttextures.com/patterns/tileable-wood.png",
+      "https://www.transparenttextures.com/patterns/white-brick-wall.png",
+      "https://www.transparenttextures.com/patterns/white-diamond.png",
+      "https://www.transparenttextures.com/patterns/white-paperboard.png",
+      "https://www.transparenttextures.com/patterns/worn-dots.png"
+    ];
 
     const fontDropdown = document.getElementById("fontDropdown");
     fonts.forEach(font => {
@@ -182,9 +199,17 @@
       const option = document.createElement("option");
       option.textContent = `Texture ${i + 1}`;
       option.value = url;
+      option.style.backgroundImage = `url(${url})`;
+      option.style.backgroundSize = 'cover';
+      option.style.padding = '5px';
+      option.style.color = '#333';
+      option.style.fontFamily = 'Lexend Deca';
       textureDropdown.appendChild(option);
     });
-    textureDropdown.onchange = () => selectedTexture = textureDropdown.value;
+    textureDropdown.onchange = () => {
+      selectedTexture = textureDropdown.value;
+      generateText();
+    };
 
     document.getElementById("fontSize").oninput = e => {
       document.getElementById("fontSizeLabel").innerText = e.target.value + "px";
